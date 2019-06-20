@@ -61,7 +61,6 @@ class ComplexProp(Proposition):
     """
     def __eq__(self, value):
         """ Defines P=>Q == P=>Q and P=>Q != Q=>P, etc...
-            TODO: Simplify this/make it more readable.
         """
         return self.rawData == value.rawData and self.operator == value.operator and self.secondProp== value.secondProp
     def __str__(self):
@@ -76,11 +75,6 @@ class ComplexProp(Proposition):
     def __init__(self, *args, **kwargs):
         """ Logic: ComplexProp(P,<op>,Q) needs to properly represent P <op> Q, and we also need
             to account for P or Q being a ComplexProp by using parentheses.
-            TODO: Make this more elegant/"pythonic".  Also account for performance as we might end
-                  up creating many embedded ComplexProps on the fly depending on the complexity of
-                  the caller's input.
-            TODO: Right now the operators are applied naiively left-to-right instead of taking into
-                  account the standard order of operations: (negation, conjunction, disjunction)
         """
         self.rawData = args[0]
         self.operator= args[1]
