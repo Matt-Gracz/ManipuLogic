@@ -29,6 +29,16 @@ class Proposition(LogicalConstruct):
         from Operators import createImplication
         cp = createImplication(self,value)
         return cp
+    def __iter__(self):
+        """ Make all propositions iterable so they can be used in iterable manipulations """
+        return self
+    def __next__(self):
+        """ Make all propositions iterable so they can be used in iterable manipulations,
+            however each subclass needs to implement what "next" means when iterating *over* a
+            proposition, rather than over a *list* of propositions
+        """
+        pass
+
     def propType():
         """ Virtual function that each subclass of Proposition must implement as a conceptual 
             shortcut for typeOf(P), where P is an instantiation of a subclass of Proposition 
@@ -62,7 +72,12 @@ class ComplexProp(Proposition):
     def __eq__(self, value):
         """ Defines P=>Q == P=>Q and P=>Q != Q=>P, etc...
         """
+        #props = [self, value] ITERABLE VERSION BROKEN
+        #members = ['rawData', 'operator', 'secondProp']
+        #print(getattr(props[0], members[0]))
+        #return all([[getattr(x, z) == getattr(y, z) for x, y in props] for z in members])
         return self.rawData == value.rawData and self.operator == value.operator and self.secondProp== value.secondProp
+
     def __str__(self):
         """ If (P,=>,Q) is a ComplexProp, then str((P,=>,Q)) == "P=>Q"
         """
