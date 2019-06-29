@@ -1,5 +1,5 @@
 #!/usr/bin/python
-#< ----------- Base Classes for all objects used in PyLogic's propositonal logic processing ----------- >
+#< ----------- Base Classes for all objects used in ManipuLogic's propositonal logic processing ----------- >
 
 
 class LogicalConstruct:

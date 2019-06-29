@@ -1,5 +1,5 @@
 #!/usr/bin/python
-#< ----------- Starts the PyLogic program up ----------- >
+#< ----------- Starts the ManipuLogic program up ----------- >
 
 """ Program-level TODOs:
     1.) Check all comments for clarity
