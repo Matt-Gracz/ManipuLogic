@@ -13,9 +13,11 @@ def negate(proposition):
     """ Applies the unary operation of negation to an arbitrary instance of any subclass
         of Proposition.
     """
-    if(proposition.propType() == PropTypes.SIMPLE):
+    simple = PropTypes.SIMPLE
+    complex = PropTypes.COMPLEX
+    if(proposition.propType() == simple):
         proposition.rawData = "~"+proposition.rawData
-    elif(proposition.propType() == PropTypes.COMPLEX):
+    elif(proposition.propType() == complex):
         proposition.rawData = "~"+"("+proposition.rawData
         proposition.secondProp = proposition.secondProp+")"
     else:
