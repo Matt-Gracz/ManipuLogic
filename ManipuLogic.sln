@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.421
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "Propositional Logic", "PyLogic\Propositional Logic.pyproj", "{1D7D2F92-C8CD-4D30-B82F-06415CAB3013}"
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "Propositional Logic", "ManipuLogic\Propositional Logic.pyproj", "{1D7D2F92-C8CD-4D30-B82F-06415CAB3013}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
