@@ -10,10 +10,17 @@ class PropTypes(Enum):
 
 class Proposition(LogicalConstruct):
     """ Represents an arbitrary proposition; treated as an abstract class, of sorts """
+    propType = ""
 
     def __invert__(self):
         """ Shortcut for converting a Proposition to a string.  So ~P == str(P) """
         return self.rawData
+    def __neg__(self):
+        """ Shortcut for negating a proposition, e.g., !"My favorite food is cake" ==
+            "My favorite food is not cake"
+        """
+        from Operators import negate
+        negate(self)
     def __and__(self, value):
         """ Shortcut for conjoining two Propositions """
         from Operators import createConjunction
@@ -40,31 +47,23 @@ class Proposition(LogicalConstruct):
         pass
 
     def propType():
-        """ Virtual function that each subclass of Proposition must implement as a conceptual 
-            shortcut for typeOf(P), where P is an instantiation of a subclass of Proposition 
+        """  Conceptual Shortcut for typeOf(P), where P is an instantiation of a subclass of
+             Proposition 
         """
-        raise NotImplementedError()
+        return self.propType
 """ END CLASS"""
 class SimpleProp(Proposition):
     """ Represents a single simple proposition in string form; e.g., "Pythons are snakes", which can
         be represented by a single symbol, e.g. P=="Pythons are snakes" 
     """
-    def __not___(self):
-        """ Shortcut for negating a proposition, e.g., !"My favorite food is cake" ==
-            "My favorite food is not cake"
-        """
-        negate(self)
-    def propType():
-        """ C.f. propType in the base class Proposition 
-        """
-        return PropTypes.SIMPLE
+    propType = PropTypes.SIMPLE
 """ END CLASS """
 class ComplexProp(Proposition):
     """ Represents a single binary proposition, e.g., "2+2=4"=>"1+1=2" or "P OR Q", etc...
     """
-    rawData = ""
     secondProp = ""
     operator = ""
+    propType = PropTypes.COMPLEX
     """ Variables: rawData is the first Proposition (of any type, including ComplexProp), and the
                    secondProp is similarly the first Proposition.  The operator is any supported
                    binary operater in propositional logic.
@@ -99,9 +98,5 @@ class ComplexProp(Proposition):
             self.rawData = "("+self.rawData+")"
         if(b.DISJUNCTION in self.secondProp or b.CONJUNCTION in self.secondProp or b.IMPLICATION in self.secondProp):
             self.secondProp = "("+self.secondProp+")"
-    def propType():
-        """ C.f. propType in the base class Proposition 
-        """
-        return PropTypes.COMPLEX
 
 """END CLASS"""
