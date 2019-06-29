@@ -18,7 +18,10 @@ from Operators import *
 p = SimpleProp("P")
 q = SimpleProp("Q")
 cp = p & q | p > p | q
+cp2 = p & q
+cp2 = cp2 | p > p | q
+cp2 = -cp
 
-
-print(cp)
-
+print("CP " + ~cp)
+print("CP2 " + ~cp2)
+print(cp == cp2)
