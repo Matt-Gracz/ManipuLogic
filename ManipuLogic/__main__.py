@@ -16,11 +16,17 @@ from Propositions import *
 #from Operators import *
 #from Laws import *
 
+#p = SimpleProp("Socrates is a man.")
+#q = SimpleProp("2 + 2 = 5")
+#cp = p & q | p > p | q
+#cp2 = p & q
+#cp2 = cp2 | p > p | q
+#cp2 = -cp
+
 p = SimpleProp("P")
 q = SimpleProp("Q")
-cp = p & q | p > p | q
-cp2 = p & q
-cp2 = cp2 | p > p | q
+cp = p > q
+cp = cp & q
 cp2 = -cp
 
 print("CP " + ~cp)

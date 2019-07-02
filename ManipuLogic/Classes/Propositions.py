@@ -2,7 +2,6 @@
 #< ----------- Classes to represent propositions, e.g., "Socrates is a man." ----------- >
 from enum import Enum
 from BaseClasses import *
-#from Operators import PropositionalOperator as PO
 
 class PropTypes(Enum):
     SIMPLE = 0,
@@ -100,9 +99,12 @@ class ComplexProp(BasicProposition):
             self.operator= args[1]
             self.secondProp = args[2]
             from Operators import BinaryOperators as b
-            if(b.DISJUNCTION in self.rawData or b.CONJUNCTION in self.rawData or b.IMPLICATION in self.rawData):
-                self.rawData = "("+self.rawData+")"
-            if(b.DISJUNCTION in self.secondProp or b.CONJUNCTION in self.secondProp or b.IMPLICATION in self.secondProp):
-                self.secondProp = "("+self.secondProp+")"
+
+            if(b.DISJUNCT in self.rawData or b.CONJUCT in self.rawData or b.IMPL in self.rawData):
+                if("(" not in self.rawData and ")" not in self.rawData):
+                    self.rawData = "("+self.rawData+")"
+            if(b.DISJUNCT in self.secondProp or b.CONJUCT in self.secondProp or b.IMPL in self.secondProp):
+                if("(" not in self.secondProp and ")" not in self.secondProp):
+                    self.secondProp = "("+self.secondProp+")"
 
 """END CLASS"""
