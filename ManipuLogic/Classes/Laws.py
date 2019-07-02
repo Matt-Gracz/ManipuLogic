@@ -30,26 +30,28 @@ class Law(LogicalConstruct):
         if(okToMap):
             result = self.mapping[operator]
             ant = result[0].replace(LAWKWORDS.FIRSTPROP, proposition.rawData)
+            ant = ant.replace(LAWKWORDS.SECONDPROP, proposition.secondProp)
             operator = result[1]
-            con = result[2].replace(LAWKWORDS.SECONDPROP, proposition.secondProp)
+            con = result[2].replace(LAWKWORDS.FIRSTPROP, proposition.rawData)
+            con = con.replace(LAWKWORDS.SECONDPROP, proposition.secondProp)
             returnProp = ComplexProp(ant, operator, con)
         return returnProp
 """ END CLASS """
 
-class ImplicationReplacement(Law):
+class IMPLReplacement(Law):
     """ Encodes (P => Q) <==> (~P => Q)
     """
 
     def __init__(self, *args, **kwargs):
-        toDisjunction = [LAWKWORDS.NOTFIRST, BinaryOperators.DISJUNCTION, LAWKWORDS.SECONDPROP]
-        toImplication = [LAWKWORDS.NOTFIRST, BinaryOperators.IMPLICATION, LAWKWORDS.SECONDPROP]
+        toDISJUNCT = [LAWKWORDS.NOTFIRST, BinaryOperators.DISJUNCT, LAWKWORDS.SECONDPROP]
+        toIMPL = [LAWKWORDS.NOTFIRST, BinaryOperators.IMPL, LAWKWORDS.SECONDPROP]
         mapping = {
-                BinaryOperators.IMPLICATION : toDisjunction,
-                BinaryOperators.DISJUNCTION : toImplication,
+                BinaryOperators.IMPL : toDISJUNCT,
+                BinaryOperators.DISJUNCT : toIMPL,
             }
     
-    def applyImplicationReplacement(self, proposition):
-        allowedOperators = [BinaryOperators.IMPLICATION, BinaryOperators.DISJUNCTION]
+    def applyIMPLReplacement(self, proposition):
+        allowedOperators = [BinaryOperators.IMPL, BinaryOperators.DISJUNCT]
         return self.applyMapping(proposition, allowedOperators)
 """ END CLASS """
 
@@ -57,13 +59,25 @@ class DemorgansLaw(Law):
     """ Encodes Demorgan's Law (c.f. https://en.wikipedia.org/wiki/De_Morgan%27s_laws)
     """
     def __init__(self, *args, **kwargs):
-        conjunction = [LAWKWORDS.NOTFIRST, BinaryOperators.DISJUNCTION, LAWKWORDS.NOTSECOND + ")"]
-        disjunction = [LAWKWORDS.NOTFIRST, BinaryOperators.CONJUNCTION, LAWKWORDS.NOTSECOND + ")"]
-        implication = [LAWKWORDS.FIRSTPROP, BinaryOperators.CONJUNCTION, LAWKWORDS.NOTSECOND + ")"]
+        CONJUCT = [LAWKWORDS.NOTFIRST, BinaryOperators.DISJUNCT, LAWKWORDS.NOTSECOND]
+        DISJUNCT = [LAWKWORDS.NOTFIRST, BinaryOperators.CONJUCT, LAWKWORDS.NOTSECOND]
+        IMPL = [LAWKWORDS.FIRSTPROP, BinaryOperators.CONJUCT, LAWKWORDS.NOTSECOND]
+        """TODO: Decide which common form of xor to use:
+           (1) (P AND Q) OR (~P AND ~Q)
+                        v.s.
+           (2) (P AND ~Q) OR (~P AND Q)
+           (in order to figure out a way to toggle between them so the user can select a preferred
+           form)
+        """
+        #xor is a little more complicated syntactically so we'll build it up in stages
+        firstDisjunct = "(" + LAWKWORDS.FIRSTPROP + BinaryOperators.CONJUCT + LAWKWORDS.SECONDPROP + ")"
+        secondDisjunct = "(" + LAWKWORDS.NOTFIRST + BinaryOperators.CONJUCT + LAWKWORDS.NOTSECOND + ")"
+        XOR = [firstDisjunct, BinaryOperators.DISJUNCT, secondDisjunct]
         self.mapping = {
-            BinaryOperators.CONJUNCTION : conjunction,
-            BinaryOperators.DISJUNCTION : disjunction,
-            BinaryOperators.IMPLICATION : implication
+            BinaryOperators.CONJUCT : CONJUCT,
+            BinaryOperators.DISJUNCT : DISJUNCT,
+            BinaryOperators.IMPL : IMPL,
+            BinaryOperators.XOR : XOR
             }    
 
     def applyDemorgansLaw(self, proposition):

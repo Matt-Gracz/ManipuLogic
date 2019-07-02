@@ -32,13 +32,19 @@ class BasicProposition(LogicalConstruct):
         """ Shortcut for disjoining (inclusive) two Propositions """
         from Operators import PropositionalOperator as PO
         op = PO()
-        cp = op.disjoinn(self, value)
+        cp = op.disjoin(self, value)
         return cp
     def __gt__(self, value):
         """ Shortcut for disjoin(negate(P), Q), where (P,Q) are Propositions """
         from Operators import PropositionalOperator as PO
         op = PO()
         cp = op.imply(self, value)
+        return cp
+    def __add__(self, value):
+        """ Shortcut for xor(P, Q), where (P,Q) are Propositioins """
+        from Operators import PropositionalOperator as PO
+        op = PO()
+        cp = op.xor(self, value)
         return cp
     def __iter__(self):
         """ Make all propositions iterable so they can be used in iterable manipulations """
@@ -98,13 +104,15 @@ class ComplexProp(BasicProposition):
             self.rawData = args[0]
             self.operator= args[1]
             self.secondProp = args[2]
-            from Operators import BinaryOperators as b
-
-            if(b.DISJUNCT in self.rawData or b.CONJUCT in self.rawData or b.IMPL in self.rawData):
-                if("(" not in self.rawData and ")" not in self.rawData):
+            from Operators import BinaryOperators
+            operators = [op for op in BinaryOperators.opList]
+            containsOp = any([x in self.rawData for x in operators])
+            parenthesized = "(" == self.rawData[0] and ")" == self.rawData[-1]
+            if(containsOp and not parenthesized):
                     self.rawData = "("+self.rawData+")"
-            if(b.DISJUNCT in self.secondProp or b.CONJUCT in self.secondProp or b.IMPL in self.secondProp):
-                if("(" not in self.secondProp and ")" not in self.secondProp):
+            containsOp = any([x in self.secondProp for x in operators])
+            parenthesized = "(" == self.secondProp[0] and ")" == self.secondProp[-1]
+            if(containsOp and not parenthesized):
                     self.secondProp = "("+self.secondProp+")"
 
 """END CLASS"""

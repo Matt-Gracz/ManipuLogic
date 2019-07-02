@@ -1,18 +1,19 @@
 #!/usr/bin/python
-from enum import Enum
 from Propositions import ComplexProp, SimpleProp, PropTypes
 from BaseClasses import Operator
 
 #< ----------- Functions to represent operations/operators over the domain of propositions,
-#              e.g., negation or material implication ----------- >
+#              e.g., negation or material IMPL ----------- >
 
-class BinaryOperators:
-    DISJUNCTION = " OR "
-    CONJUNCTION = " AND "
-    IMPLICATION = " => "
+class BinaryOperators():
+    DISJUNCT = " OR "
+    CONJUCT = " AND "
+    IMPL = " => "
+    XOR = "(+)"
+    opList = [DISJUNCT, CONJUCT, IMPL, XOR]
 
 class PropositionalOperator(Operator):
-    """ Encodes all operator in propositional logic, e.g., negation, conjunction, etc... """
+    """ Encodes all operator in propositional logic, e.g., negation, CONJUCT, etc... """
     
     def negate(self, proposition):
         """ Applies the unary operation of negation to an arbitrary instance of any subclass
@@ -39,22 +40,28 @@ class PropositionalOperator(Operator):
         cp = ComplexProp(~antecdent, operator, ~consequent)
         return cp
 
-    def disjoinn(self, antecedent, consequent):
-        """ Creates a  ComplexProp of the form (antecdent, OR, consequent)
+    def disjoin(self, antecedent, consequent):
+        """ Creates a ComplexProp of the form (antecdent, OR, consequent)
         """
-        cp = self.createBinaryOperator(antecedent, BinaryOperators.DISJUNCTION, consequent)
+        cp = self.createBinaryOperator(antecedent, BinaryOperators.DISJUNCT, consequent)
         return cp
 
     def conjoin(self, antecedent, consequent):
-        """ Creates a  ComplexProp of the form (antecdent, AND, consequent)
+        """ Creates a ComplexProp of the form (antecdent, AND, consequent)
         """
-        cp = self.createBinaryOperator(antecedent, BinaryOperators.CONJUNCTION, consequent)
+        cp = self.createBinaryOperator(antecedent, BinaryOperators.CONJUCT, consequent)
         return cp
 
     def imply(self, antecedent, consequent):
-        """ Creates a  ComplexProp of the form (antecdent, =>, consequent)
+        """ Creates a ComplexProp of the form (antecdent, =>, consequent)
         """
-        cp = self.createBinaryOperator(antecedent, BinaryOperators.IMPLICATION, consequent)
+        cp = self.createBinaryOperator(antecedent, BinaryOperators.IMPL, consequent)
+        return cp
+
+    def xor(self, antecdent, consequent):
+        """ Creates a ComplexProp of the form (antecdent (+) conseqent)
+        """
+        cp = self.createBinaryOperator(antecdent, BinaryOperators.XOR, consequent)
         return cp
 
 

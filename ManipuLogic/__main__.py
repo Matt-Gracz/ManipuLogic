@@ -22,12 +22,18 @@ from Propositions import *
 #cp2 = p & q
 #cp2 = cp2 | p > p | q
 #cp2 = -cp
+def pr():
+    print("CP " + ~cp)
+    print("CP2 " + ~cp2)
+    print("")
 
 p = SimpleProp("P")
 q = SimpleProp("Q")
 cp = p > q
-cp = cp & q
-cp2 = -cp
+cp2 = cp
+pr()
 
-print("CP " + ~cp)
-print("CP2 " + ~cp2)
+cp = cp | q
+cp2 = cp & p
+pr()
+
