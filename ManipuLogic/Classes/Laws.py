@@ -3,43 +3,63 @@
 from BaseClasses import *
 from Operators import *
 from Propositions import *
+from enum import Enum
+
+class LAWKWORDS:
+    FIRSTPROP = "first"
+    SECONDPROP = "second"
+    NOTFIRST = "~first"
+    NOTSECOND = "~second"
+
 
 class Law(LogicalConstruct):
+    """ An abstract law that replaces one set of symbols with another.  Individual laws of 
+       replacement will inheret from this class 
+    """
     mapping = {}
     
-    def __init__(self, *args, **kwargs):
-        mapping = {}
-
-    def createMapping(self, dict):
-        self.mapping = dict
+    def applyMapping(self, proposition, allowedOperators = []):
+        """ Once a mapping is set up, this function does the work of actually replacing the symbols
+           according to the logic encoded in the mapping.
+        """
+        ant = proposition.rawData
+        operator = proposition.operator
+        con = proposition.secondProp
+        returnProp = ComplexProp(ant, operator, con)
+        okToMap = not allowedOperators or operator in allowedOperators
+        if(okToMap):
+            result = self.mapping[operator]
+            ant = result[0].replace(LAWKWORDS.FIRSTPROP, proposition.rawData)
+            operator = result[1]
+            con = result[2].replace(LAWKWORDS.SECONDPROP, proposition.secondProp)
+            returnProp = ComplexProp(ant, operator, con)
+        return returnProp
+""" END CLASS """
 
 class ImplicationReplacement(Law):
+    """ Encodes (P => Q) <==> (~P => Q)
+    """
+
     def __init__(self, *args, **kwargs):
-        toDisjunction = ["~ant", BinaryOperators.DISJUNCTION, "con"]
-        toImplication = ["~ant", BinaryOperators.IMPLICATION, "con"]
+        toDisjunction = [LAWKWORDS.NOTFIRST, BinaryOperators.DISJUNCTION, LAWKWORDS.SECONDPROP]
+        toImplication = [LAWKWORDS.NOTFIRST, BinaryOperators.IMPLICATION, LAWKWORDS.SECONDPROP]
         mapping = {
                 BinaryOperators.IMPLICATION : toDisjunction,
                 BinaryOperators.DISJUNCTION : toImplication,
             }
     
-    def applyReplacement(self, proposition):
-        firstProp = proposition.rawData
-        operator = proposition.operator
-        secondProp = proposition.secondProp
-        cp = ComplexProp(firstProp, operator, secondProp)
-        if(operator in [BinaryOperators.IMPLICATION, BinaryOperators.DISJUNCTION]):
-            result = self.mapping[operator]
-            ant = result[0].replace("ant", proposition.rawData)
-            operator = result[1]
-            cons = result[2].replace("con", proposition.secondProp)
-            cp = ComplexProp(ant, operator, cons)
-        return cp
+    def applyImplicationReplacement(self, proposition):
+        allowedOperators = [BinaryOperators.IMPLICATION, BinaryOperators.DISJUNCTION]
+        return self.applyMapping(proposition, allowedOperators)
+""" END CLASS """
 
 class DemorgansLaw(Law):
+    """ Encodes Demorgan's Law (c.f. https://en.wikipedia.org/wiki/De_Morgan%27s_laws)
+    """
     def __init__(self, *args, **kwargs):
-        conjunction = ["~ant", BinaryOperators.DISJUNCTION, "~con)"]
-        disjunction = ["~ant", BinaryOperators.CONJUNCTION, "~con)"]
-        implication = ["ant", BinaryOperators.CONJUNCTION, "~con)"]
+        conjunction = [LAWKWORDS.NOTFIRST, BinaryOperators.DISJUNCTION, LAWKWORDS.NOTSECOND + ")"]
+        disjunction = [LAWKWORDS.NOTFIRST, BinaryOperators.CONJUNCTION, LAWKWORDS.NOTSECOND + ")"]
+        implication = [LAWKWORDS.FIRSTPROP, BinaryOperators.CONJUNCTION, LAWKWORDS.NOTSECOND + ")"]
         self.mapping = {
             BinaryOperators.CONJUNCTION : conjunction,
             BinaryOperators.DISJUNCTION : disjunction,
@@ -47,16 +67,6 @@ class DemorgansLaw(Law):
             }    
 
     def applyDemorgansLaw(self, proposition):
-        operator = proposition.operator
-        result = self.mapping[operator]
-        ant = result[0].replace("ant", proposition.rawData)
-        operator = result[1]
-        cons = result[2].replace("con", proposition.secondProp)
-        cp = ComplexProp(ant, operator, cons)
-        return cp
-
-
-    
-
+        return self.applyMapping(proposition)
 """ END CLASS """
 
