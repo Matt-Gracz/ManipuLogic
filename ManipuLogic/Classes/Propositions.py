@@ -2,15 +2,15 @@
 #< ----------- Classes to represent propositions, e.g., "Socrates is a man." ----------- >
 from enum import Enum
 from BaseClasses import *
+#from Operators import PropositionalOperator as PO
 
 class PropTypes(Enum):
     SIMPLE = 0,
     COMPLEX = 1
 
 
-class Proposition(LogicalConstruct):
-    """ Represents an arbitrary proposition; treated as an abstract class, of sorts """
-    propType = ""
+class BasicProposition(LogicalConstruct):
+    """ Represents an instance of a propsostion in propositional logic, specifically """
 
     def __invert__(self):
         """ Shortcut for converting a Proposition to a string.  So ~P == str(P) """
@@ -19,23 +19,27 @@ class Proposition(LogicalConstruct):
         """ Shortcut for negating a proposition, e.g., !"My favorite food is cake" ==
             "My favorite food is not cake"
         """
-        from Operators import negate
-        cp = negate(self)
+        from Operators import PropositionalOperator as PO
+        op = PO()
+        cp = op.negate(self)
         return cp
     def __and__(self, value):
         """ Shortcut for conjoining two Propositions """
-        from Operators import createConjunction
-        cp = createConjunction(self, value)
+        from Operators import PropositionalOperator as PO
+        op = PO()
+        cp = op.conjoin(self, value)
         return cp
     def __or__(self, value):
         """ Shortcut for disjoining (inclusive) two Propositions """
-        from Operators import createDisjunctionn
-        cp = createDisjunctionn(self, value)
+        from Operators import PropositionalOperator as PO
+        op = PO()
+        cp = op.disjoinn(self, value)
         return cp
     def __gt__(self, value):
-        """ Shortcut for createDisjunction(negate(P), Q), where (P,Q) are Propositions """
-        from Operators import createImplication
-        cp = createImplication(self, value)
+        """ Shortcut for disjoin(negate(P), Q), where (P,Q) are Propositions """
+        from Operators import PropositionalOperator as PO
+        op = PO()
+        cp = op.imply(self, value)
         return cp
     def __iter__(self):
         """ Make all propositions iterable so they can be used in iterable manipulations """
@@ -53,13 +57,13 @@ class Proposition(LogicalConstruct):
         """
         return self.propType
 """ END CLASS"""
-class SimpleProp(Proposition):
+class SimpleProp(BasicProposition):
     """ Represents a single simple proposition in string form; e.g., "Pythons are snakes", which can
         be represented by a single symbol, e.g. P=="Pythons are snakes" 
     """
     propType = PropTypes.SIMPLE
 """ END CLASS """
-class ComplexProp(Proposition):
+class ComplexProp(BasicProposition):
     """ Represents a single binary proposition, e.g., "2+2=4"=>"1+1=2" or "P OR Q", etc...
     """
     secondProp = ""

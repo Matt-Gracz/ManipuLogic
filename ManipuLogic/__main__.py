@@ -11,10 +11,10 @@
 
 import sys
 sys.path.append('Classes')
-from BaseClasses import *
+#from BaseClasses import *
 from Propositions import *
-from Operators import *
-from Laws import *
+#from Operators import *
+#from Laws import *
 
 p = SimpleProp("P")
 q = SimpleProp("Q")

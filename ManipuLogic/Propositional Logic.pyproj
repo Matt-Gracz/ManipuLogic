@@ -29,7 +29,7 @@
     <Compile Include="Classes\Propositions.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Operators.py" />
+    <Compile Include="Classes\Operators.py" />
     <Compile Include="__main__.py">
       <SubType>Code</SubType>
     </Compile>

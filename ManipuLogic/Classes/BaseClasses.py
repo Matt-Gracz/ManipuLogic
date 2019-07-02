@@ -4,7 +4,8 @@
 
 class LogicalConstruct:
     """ Basic construct that represents propositons, logic operators, and all
- processing units """
+        processing units 
+    """
     rawData = ""
     def __eq__(self, value):
         return self.rawData == value.rawData
@@ -13,6 +14,13 @@ class LogicalConstruct:
     def __init__(self, *args, **kwargs):
         if(len(args) > 0):
             self.rawData = args[0]
+""" END CLASS """
+class Proposition(LogicalConstruct):
+    """ Any proposition in any type of logic (e.g., propositional, first-order, etc...) """
+    propType = ""
+""" END CLASS """
 
+class Operator(LogicalConstruct):
+    """ Any operator in any type of logic (e.g., conjunction, for-all(x) etc...) """
 """ END CLASS """
 
