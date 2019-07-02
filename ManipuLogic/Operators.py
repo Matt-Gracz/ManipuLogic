@@ -13,16 +13,20 @@ def negate(proposition):
     """ Applies the unary operation of negation to an arbitrary instance of any subclass
         of Proposition.
     """
-    simple = PropTypes.SIMPLE
-    complex = PropTypes.COMPLEX
-    if(proposition.propType() == simple):
-        proposition.rawData = "~"+proposition.rawData
-    elif(proposition.propType() == complex):
-        proposition.rawData = "~"+"("+proposition.rawData
-        proposition.secondProp = proposition.secondProp+")"
+    from Laws import DemorgansLaw
+    if(proposition.getPropType() == PropTypes.SIMPLE):
+        newProp = SimpleProp()
+        newProp.rawData = "~"+proposition.rawData
+    elif(proposition.getPropType() == PropTypes.COMPLEX):
+        newProp = ComplexProp(proposition.rawData, proposition.operator, proposition.secondProp)
+        #newProp.rawData = "~" + "(" + proposition.rawData
+        #newProp.operator = proposition.operator
+        #newProp.secondProp = proposition.secondProp + ")"
+        DL = DemorgansLaw()
+        newProp = DL.applyDemorgansLaw(newProp)
     else:
         raise NotImplementedError()
-    return proposition
+    return newProp
 
 def createBinaryOperator(antecdent, operator, consequent):
     """ Creates a generic ComplexProp of the form (antecdent, operator, consequent)

@@ -24,4 +24,3 @@ cp2 = -cp
 
 print("CP " + ~cp)
 print("CP2 " + ~cp2)
-print(cp == cp2)

@@ -20,21 +20,22 @@ class Proposition(LogicalConstruct):
             "My favorite food is not cake"
         """
         from Operators import negate
-        negate(self)
+        cp = negate(self)
+        return cp
     def __and__(self, value):
         """ Shortcut for conjoining two Propositions """
         from Operators import createConjunction
-        cp = createConjunction(self,value)
+        cp = createConjunction(self, value)
         return cp
     def __or__(self, value):
         """ Shortcut for disjoining (inclusive) two Propositions """
         from Operators import createDisjunctionn
-        cp = createDisjunctionn(self,value)
+        cp = createDisjunctionn(self, value)
         return cp
     def __gt__(self, value):
         """ Shortcut for createDisjunction(negate(P), Q), where (P,Q) are Propositions """
         from Operators import createImplication
-        cp = createImplication(self,value)
+        cp = createImplication(self, value)
         return cp
     def __iter__(self):
         """ Make all propositions iterable so they can be used in iterable manipulations """
@@ -46,7 +47,7 @@ class Proposition(LogicalConstruct):
         """
         pass
 
-    def propType():
+    def getPropType(self):
         """  Conceptual Shortcut for typeOf(P), where P is an instantiation of a subclass of
              Proposition 
         """
@@ -80,7 +81,7 @@ class ComplexProp(Proposition):
     def __str__(self):
         """ If (P,=>,Q) is a ComplexProp, then str((P,=>,Q)) == "P=>Q"
         """
-        return self.rawData+self.operator+self.secondProp
+        return self.rawData + self.operator + self.secondProp
     def __invert__(self):
         """ Need to override the base class' invert as just returning rawData doesn't properly 
             represent the string form of a ComplexProp
@@ -90,13 +91,14 @@ class ComplexProp(Proposition):
         """ Logic: ComplexProp(P,<op>,Q) needs to properly represent P <op> Q, and we also need
             to account for P or Q being a ComplexProp by using parentheses.
         """
-        self.rawData = args[0]
-        self.operator= args[1]
-        self.secondProp = args[2]
-        from Operators import BinaryOperators as b
-        if(b.DISJUNCTION in self.rawData or b.CONJUNCTION in self.rawData or b.IMPLICATION in self.rawData):
-            self.rawData = "("+self.rawData+")"
-        if(b.DISJUNCTION in self.secondProp or b.CONJUNCTION in self.secondProp or b.IMPLICATION in self.secondProp):
-            self.secondProp = "("+self.secondProp+")"
+        if(len(args) >= 3):
+            self.rawData = args[0]
+            self.operator= args[1]
+            self.secondProp = args[2]
+            from Operators import BinaryOperators as b
+            if(b.DISJUNCTION in self.rawData or b.CONJUNCTION in self.rawData or b.IMPLICATION in self.rawData):
+                self.rawData = "("+self.rawData+")"
+            if(b.DISJUNCTION in self.secondProp or b.CONJUNCTION in self.secondProp or b.IMPLICATION in self.secondProp):
+                self.secondProp = "("+self.secondProp+")"
 
 """END CLASS"""
