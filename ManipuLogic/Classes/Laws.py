@@ -43,15 +43,15 @@ class IMPLReplacement(Law):
     """
 
     def __init__(self, *args, **kwargs):
-        toDISJUNCT = [LAWKWORDS.NOTFIRST, BinaryOperators.DISJUNCT, LAWKWORDS.SECONDPROP]
-        toIMPL = [LAWKWORDS.NOTFIRST, BinaryOperators.IMPL, LAWKWORDS.SECONDPROP]
+        toDISJUNCT = [LAWKWORDS.NOTFIRST, OpStrings.DISJUNCT, LAWKWORDS.SECONDPROP]
+        toIMPL = [LAWKWORDS.NOTFIRST, OpStrings.IMPL, LAWKWORDS.SECONDPROP]
         mapping = {
                 BinaryOperators.IMPL : toDISJUNCT,
                 BinaryOperators.DISJUNCT : toIMPL,
             }
     
     def applyIMPLReplacement(self, proposition):
-        allowedOperators = [BinaryOperators.IMPL, BinaryOperators.DISJUNCT]
+        allowedOperators = [OpStrings.IMPL, OpStrings.DISJUNCT]
         return self.applyMapping(proposition, allowedOperators)
 """ END CLASS """
 
@@ -59,9 +59,9 @@ class DemorgansLaw(Law):
     """ Encodes Demorgan's Law (c.f. https://en.wikipedia.org/wiki/De_Morgan%27s_laws)
     """
     def __init__(self, *args, **kwargs):
-        CONJUCT = [LAWKWORDS.NOTFIRST, BinaryOperators.DISJUNCT, LAWKWORDS.NOTSECOND]
-        DISJUNCT = [LAWKWORDS.NOTFIRST, BinaryOperators.CONJUCT, LAWKWORDS.NOTSECOND]
-        IMPL = [LAWKWORDS.FIRSTPROP, BinaryOperators.CONJUCT, LAWKWORDS.NOTSECOND]
+        CONJUCT = [LAWKWORDS.NOTFIRST, OpStrings.DISJUNCT, LAWKWORDS.NOTSECOND]
+        DISJUNCT = [LAWKWORDS.NOTFIRST, OpStrings.CONJUCT, LAWKWORDS.NOTSECOND]
+        IMPL = [LAWKWORDS.FIRSTPROP, OpStrings.CONJUCT, LAWKWORDS.NOTSECOND]
         """TODO: Decide which common form of xor to use:
            (1) (P AND Q) OR (~P AND ~Q)
                         v.s.
@@ -70,9 +70,9 @@ class DemorgansLaw(Law):
            form)
         """
         #xor is a little more complicated syntactically so we'll build it up in stages
-        firstDisjunct = "(" + LAWKWORDS.FIRSTPROP + BinaryOperators.CONJUCT + LAWKWORDS.SECONDPROP + ")"
-        secondDisjunct = "(" + LAWKWORDS.NOTFIRST + BinaryOperators.CONJUCT + LAWKWORDS.NOTSECOND + ")"
-        XOR = [firstDisjunct, BinaryOperators.DISJUNCT, secondDisjunct]
+        firstDisjunct = "(" + LAWKWORDS.FIRSTPROP + OpStrings.CONJUCT + LAWKWORDS.SECONDPROP + ")"
+        secondDisjunct = "(" + LAWKWORDS.NOTFIRST + OpStrings.CONJUCT + LAWKWORDS.NOTSECOND + ")"
+        XOR = [firstDisjunct, OpStrings.DISJUNCT, secondDisjunct]
         self.mapping = {
             BinaryOperators.CONJUCT : CONJUCT,
             BinaryOperators.DISJUNCT : DISJUNCT,

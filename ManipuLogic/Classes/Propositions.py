@@ -18,31 +18,31 @@ class BasicProposition(LogicalConstruct):
         """ Shortcut for negating a proposition, e.g., !"My favorite food is cake" ==
             "My favorite food is not cake"
         """
-        from Operators import PropositionalOperator as PO
+        from Operators import BinaryOperator as PO
         op = PO()
         cp = op.negate(self)
         return cp
     def __and__(self, value):
         """ Shortcut for conjoining two Propositions """
-        from Operators import PropositionalOperator as PO
+        from Operators import BinaryOperator as PO
         op = PO()
         cp = op.conjoin(self, value)
         return cp
     def __or__(self, value):
         """ Shortcut for disjoining (inclusive) two Propositions """
-        from Operators import PropositionalOperator as PO
+        from Operators import BinaryOperator as PO
         op = PO()
         cp = op.disjoin(self, value)
         return cp
     def __gt__(self, value):
         """ Shortcut for disjoin(negate(P), Q), where (P,Q) are Propositions """
-        from Operators import PropositionalOperator as PO
+        from Operators import BinaryOperator as PO
         op = PO()
         cp = op.imply(self, value)
         return cp
     def __add__(self, value):
         """ Shortcut for xor(P, Q), where (P,Q) are Propositioins """
-        from Operators import PropositionalOperator as PO
+        from Operators import BinaryOperator as PO
         op = PO()
         cp = op.xor(self, value)
         return cp
@@ -74,17 +74,19 @@ class ComplexProp(BasicProposition):
     secondProp = ""
     operator = ""
     propType = PropTypes.COMPLEX
-    """ Variables: rawData is the first Proposition (of any type, including ComplexProp), and the
+    """ Members: rawData is the first Proposition (of any type, including ComplexProp), and the
                    secondProp is similarly the first Proposition.  The operator is any supported
                    binary operater in propositional logic.
     """
+
+    members = ['rawData', 'operator', 'secondProp']
+    """ Class variables:  Shortcuts for processing instance information of this class """
+
     def __eq__(self, value):
         """ Defines P=>Q == P=>Q and P=>Q != Q=>P, etc...
         """
         props = [self, value]
-        members = ['rawData', 'operator', 'secondProp']
-        return all([[getattr(x, z) == getattr(y, z) for x, y in props] for z in members])
-
+        return all([[getattr(x, z) == getattr(y, z) for x, y in props] for z in self.members])
     def __str__(self):
         """ If (P,=>,Q) is a ComplexProp, then str((P,=>,Q)) == "P=>Q"
         """
@@ -102,8 +104,8 @@ class ComplexProp(BasicProposition):
             self.rawData = args[0]
             self.operator= args[1]
             self.secondProp = args[2]
-            from Operators import BinaryOperators
-            operators = [op for op in BinaryOperators.opList]
+            from Operators import OpStrings
+            operators = [op for op in OpStrings.opList]
             containsOp = any([x in self.rawData for x in operators])
             parenthesized = "(" == self.rawData[0] and ")" == self.rawData[-1]
             if(containsOp and not parenthesized):
