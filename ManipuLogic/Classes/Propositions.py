@@ -81,11 +81,9 @@ class ComplexProp(BasicProposition):
     def __eq__(self, value):
         """ Defines P=>Q == P=>Q and P=>Q != Q=>P, etc...
         """
-        #props = [self, value] ITERABLE VERSION BROKEN
-        #members = ['rawData', 'operator', 'secondProp']
-        #print(getattr(props[0], members[0]))
-        #return all([[getattr(x, z) == getattr(y, z) for x, y in props] for z in members])
-        return self.rawData == value.rawData and self.operator == value.operator and self.secondProp== value.secondProp
+        props = [self, value]
+        members = ['rawData', 'operator', 'secondProp']
+        return all([[getattr(x, z) == getattr(y, z) for x, y in props] for z in members])
 
     def __str__(self):
         """ If (P,=>,Q) is a ComplexProp, then str((P,=>,Q)) == "P=>Q"

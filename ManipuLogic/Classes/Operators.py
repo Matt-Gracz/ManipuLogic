@@ -9,7 +9,7 @@ class BinaryOperators():
     DISJUNCT = " OR "
     CONJUCT = " AND "
     IMPL = " => "
-    XOR = "(+)"
+    XOR = " (+) "
     opList = [DISJUNCT, CONJUCT, IMPL, XOR]
 
 class PropositionalOperator(Operator):
