@@ -18,32 +18,32 @@ class BasicProposition(LogicalConstruct):
         """ Shortcut for negating a proposition, e.g., !"My favorite food is cake" ==
             "My favorite food is not cake"
         """
-        from Operators import BinaryOperator as PO
-        op = PO()
+        from Operators import UnaryOperator as OP
+        op = OP()
         cp = op.negate(self)
         return cp
     def __and__(self, value):
         """ Shortcut for conjoining two Propositions """
-        from Operators import BinaryOperator as PO
-        op = PO()
+        from Operators import BinaryOperator as OP
+        op = OP()
         cp = op.conjoin(self, value)
         return cp
     def __or__(self, value):
         """ Shortcut for disjoining (inclusive) two Propositions """
-        from Operators import BinaryOperator as PO
-        op = PO()
+        from Operators import BinaryOperator as OP
+        op = OP()
         cp = op.disjoin(self, value)
         return cp
     def __gt__(self, value):
         """ Shortcut for disjoin(negate(P), Q), where (P,Q) are Propositions """
-        from Operators import BinaryOperator as PO
-        op = PO()
+        from Operators import BinaryOperator as OP
+        op = OP()
         cp = op.imply(self, value)
         return cp
     def __add__(self, value):
         """ Shortcut for xor(P, Q), where (P,Q) are Propositioins """
-        from Operators import BinaryOperator as PO
-        op = PO()
+        from Operators import BinaryOperator as OP
+        op = OP()
         cp = op.xor(self, value)
         return cp
     def __iter__(self):

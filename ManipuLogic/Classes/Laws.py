@@ -46,8 +46,8 @@ class IMPLReplacement(Law):
         toDISJUNCT = [LAWKWORDS.NOTFIRST, OpStrings.DISJUNCT, LAWKWORDS.SECONDPROP]
         toIMPL = [LAWKWORDS.NOTFIRST, OpStrings.IMPL, LAWKWORDS.SECONDPROP]
         mapping = {
-                BinaryOperators.IMPL : toDISJUNCT,
-                BinaryOperators.DISJUNCT : toIMPL,
+                OpStrings.IMPL : toDISJUNCT,
+                OpStrings.DISJUNCT : toIMPL,
             }
     
     def applyIMPLReplacement(self, proposition):
@@ -74,10 +74,10 @@ class DemorgansLaw(Law):
         secondDisjunct = "(" + LAWKWORDS.NOTFIRST + OpStrings.CONJUCT + LAWKWORDS.NOTSECOND + ")"
         XOR = [firstDisjunct, OpStrings.DISJUNCT, secondDisjunct]
         self.mapping = {
-            BinaryOperators.CONJUCT : CONJUCT,
-            BinaryOperators.DISJUNCT : DISJUNCT,
-            BinaryOperators.IMPL : IMPL,
-            BinaryOperators.XOR : XOR
+            OpStrings.CONJUCT : CONJUCT,
+            OpStrings.DISJUNCT : DISJUNCT,
+            OpStrings.IMPL : IMPL,
+            OpStrings.XOR : XOR
             }    
 
     def applyDemorgansLaw(self, proposition):
