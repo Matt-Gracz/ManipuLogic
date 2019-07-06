@@ -19,19 +19,26 @@ def pr():
     print("CP " + ~cp)
     print("")
 
-p = SimpleProp("Socrates is a man.")
-q = SimpleProp("2 + 2 = 5")
-cp = -p
+p = SimpleProp("P")
+q = SimpleProp("Q")
+cp = -(p + q)
 pr()
 cp = -cp
 pr()
 
-cp = -(p > q)
-pr()
+#p = SimpleProp("Socrates is a man.")
+#q = SimpleProp("2 + 2 = 5")
+#cp = -p
+#pr()
+#cp = -cp
+#pr()
 
-cp = -(p + q)
-pr()
-print(p == p)
-print (p == cp)
+#cp = -(p > q)
+#pr()
+
+#cp = -(p + q)
+#pr()
+#print(p == p)
+#print (p == cp)
 
 

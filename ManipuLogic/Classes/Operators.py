@@ -17,29 +17,29 @@ class BinaryOperator(Operator):
         etc... 
     """
 
-    def createBinaryOperator(self, antecdent, operator, consequent):
+    def applyBinaryOperator(self, antecdent, operator, consequent):
         """ Creates a generic ComplexProp of the form (antecdent, operator, consequent) """
         cp = ComplexProp(~antecdent, operator, ~consequent)
         return cp
 
     def disjoin(self, antecedent, consequent):
         """ Creates a ComplexProp of the form (antecdent, OR, consequent) """
-        cp = self.createBinaryOperator(antecedent, OpStrings.DISJUNCT, consequent)
+        cp = self.applyBinaryOperator(antecedent, OpStrings.DISJUNCT, consequent)
         return cp
 
     def conjoin(self, antecedent, consequent):
         """ Creates a ComplexProp of the form (antecdent, AND, consequent) """
-        cp = self.createBinaryOperator(antecedent, OpStrings.CONJUCT, consequent)
+        cp = self.applyBinaryOperator(antecedent, OpStrings.CONJUCT, consequent)
         return cp
 
     def imply(self, antecedent, consequent):
         """ Creates a ComplexProp of the form (antecdent, =>, consequent) """
-        cp = self.createBinaryOperator(antecedent, OpStrings.IMPL, consequent)
+        cp = self.applyBinaryOperator(antecedent, OpStrings.IMPL, consequent)
         return cp
 
     def xor(self, antecdent, consequent):
         """ Creates a ComplexProp of the form (antecdent (+) conseqent) """
-        cp = self.createBinaryOperator(antecdent, OpStrings.XOR, consequent)
+        cp = self.applyBinaryOperator(antecdent, OpStrings.XOR, consequent)
         return cp
 
 class UnaryOperator(Operator):
@@ -54,6 +54,8 @@ class UnaryOperator(Operator):
             newProp = SimpleProp()
             newProp.rawData = "~"+proposition.rawData
         elif(proposition.getPropType() == PropTypes.COMPLEX):
+            #check if either antecdent or consequent are complex and recurse if so
+
             newProp = ComplexProp(proposition.rawData, proposition.operator, proposition.secondProp)
             DL = DemorgansLaw()
             newProp = DL.applyDemorgansLaw(newProp)
