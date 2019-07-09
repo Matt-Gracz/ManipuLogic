@@ -7,7 +7,6 @@ class PropTypes(Enum):
     SIMPLE = 0,
     COMPLEX = 1
 
-
 class BasicProposition(LogicalConstruct):
     """ Represents an instance of a propsostion in propositional logic, specifically """
 
