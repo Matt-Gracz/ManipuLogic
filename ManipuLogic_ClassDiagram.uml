@@ -1,0 +1,102 @@
+@startuml
+
+LogicalConstruct <|-- LogicalContent
+LogicalContent "1" *-- LogicalContent
+LogicalContent <|-- Variable
+LogicalContent <|-- Existent
+LogicalContent <|-- Predicate
+LogicalContent <|-- Function
+
+LogicalConstruct <|-- Proposition
+Proposition <|-- SimpleProp
+Proposition <|-- ComplexProp
+Proposition --* LogicalConstruct
+Proposition --* "1" LogicalContent
+Proposition --* "1" PropType
+ComplexProp --* "1" Operator
+ComplexProp --* "2" Proposition
+
+Proposition <|-- OrdinalProposition
+OrdinalProposition <|-- FirstOrderProp
+OrdinalProposition <|-- SecondOrderProp
+OrdinalProposition --* "0/1" OrdinalProposition
+OrdinalProposition --* "0/1" Quantifier
+OrdinalProposition --* "*" Existent
+Quantifier --* "1" QuantType
+Quantifier --* "1" Variable
+FirstOrderProp --* "*" Predicate
+SecondOrderProp --* "*" Function
+Function --* "*" Predicate
+
+LogicalConstruct <|-- Law
+LogicalConstruct <|-- Operator
+Operator --* "*" Law
+Operator --* "1" OpType
+Operator <|-- Quantifier
+
+Quantifier <|-- ExistQuant
+Quantifier <|-- UniversalQuant
+
+enum PropType
+{
+	SIMPLE
+    COMPLEX
+    FIRSTORDER
+    SECONDORDER
+}
+
+enum OpType
+{
+	DISJUNCT
+    CONJUCT
+    IMPL
+    XOR
+}
+
+enum QuantType
+{
+	EXIST
+    FORALL
+}
+
+class LogicalConstruct
+{
+    string : toString()
+    void : print()
+}
+
+class LogicalContent 
+{
+	string rawData
+}
+
+class Proposition
+{
+	bool negated
+	void : applyOperator(Operator op)
+}
+
+class SimpleProp
+{
+
+}
+
+class ComplexProp
+{
+	//Has LHS and RHS propositions
+}
+
+class Operator
+{
+	dict{} lawApplicationRules
+    void : applyLaw(Law law)
+}
+
+class Law
+{
+	dict{} operatorMapping
+}
+
+
+
+@enduml
