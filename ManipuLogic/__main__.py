@@ -13,8 +13,18 @@ import sys
 sys.path.append('Classes')
 from Propositions import *
 
-
-
+#from tkinter import Tk
+#from tkinter.filedialog import askopenfilename
+#Tk().withdraw()
+#filename = askopenfilename()
+#with open(filename) as file:
+#    with file.readlines() as lines:
+#        for line in lines:
+#            try:
+#                print(line)
+#                exec(line)
+#            except Exception as e:
+#                pass
 def pr():
     print("CP " + ~cp)
     print("")

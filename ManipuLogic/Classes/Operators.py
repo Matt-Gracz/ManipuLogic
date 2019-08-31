@@ -53,6 +53,13 @@ class UnaryOperator(Operator):
             newProp = SimpleProp()
             newProp.rawData = "~"+proposition.rawData
         elif(proposition.getPropType() == PropTypes.COMPLEX):
+            """ If we're negating a complex prop, i.e., a proposition with an infixed binary
+                operator, then first we need to check if the operator is an implication. If so,
+                then we need to convert it to a disjunction.  Secondly, once that's done, we'll be
+                sure that the infixed operator is a disjunction or conjunction, so we'll apply
+                DeMorgan's law and end up with our final simplest negated form to return to the 
+                caller.
+            """
             newProp = ComplexProp(proposition.rawData, proposition.operator, proposition.secondProp)
             if(newProp.operator == OpStrings.IMPL):
                 from Laws import IMPLReplacement
