@@ -48,15 +48,17 @@ class UnaryOperator(Operator):
     def negate(self, proposition):
         """ Applies the unary operation of negation to an arbitrary instance of any subclass
             of Proposition.
-        """
-        from Laws import DemorgansLaw
+        """ 
         if(proposition.getPropType() == PropTypes.SIMPLE):
             newProp = SimpleProp()
             newProp.rawData = "~"+proposition.rawData
         elif(proposition.getPropType() == PropTypes.COMPLEX):
-            #check if either antecdent or consequent are complex and recurse if so
-
             newProp = ComplexProp(proposition.rawData, proposition.operator, proposition.secondProp)
+            if(newProp.operator == OpStrings.IMPL):
+                from Laws import IMPLReplacement
+                IR = IMPLReplacement()
+                newProp = IR.applyIMPLReplacement(newProp)
+            from Laws import DemorgansLaw
             DL = DemorgansLaw()
             newProp = DL.applyDemorgansLaw(newProp)
         else:

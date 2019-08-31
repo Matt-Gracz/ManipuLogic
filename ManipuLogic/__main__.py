@@ -25,6 +25,15 @@ cp = -(p + q)
 pr()
 cp = -cp
 pr()
+cp = p > q
+pr()
+cp = -cp
+pr()
+cp = --p&q>-p
+pr()
+cp = -(-p&q>-p)
+pr() #TODO goof around with this some more!
+
 
 #p = SimpleProp("Socrates is a man.")
 #q = SimpleProp("2 + 2 = 5")

@@ -5,7 +5,7 @@ from Operators import *
 from Propositions import *
 from enum import Enum
 
-class LAWKWORDS:
+class LawKWords:
     FIRSTPROP = "first"
     SECONDPROP = "second"
     NOTFIRST = "~first"
@@ -29,23 +29,23 @@ class Law(LogicalConstruct):
         okToMap = not allowedOperators or operator in allowedOperators
         if(okToMap):
             result = self.mapping[operator]
-            ant = result[0].replace(LAWKWORDS.FIRSTPROP, proposition.rawData)
-            ant = ant.replace(LAWKWORDS.SECONDPROP, proposition.secondProp)
+            ant = result[0].replace(LawKWords.FIRSTPROP, proposition.rawData)
+            ant = ant.replace(LawKWords.SECONDPROP, proposition.secondProp)
             operator = result[1]
-            con = result[2].replace(LAWKWORDS.FIRSTPROP, proposition.rawData)
-            con = con.replace(LAWKWORDS.SECONDPROP, proposition.secondProp)
+            con = result[2].replace(LawKWords.FIRSTPROP, proposition.rawData)
+            con = con.replace(LawKWords.SECONDPROP, proposition.secondProp)
             returnProp = ComplexProp(ant, operator, con)
         return returnProp
 """ END CLASS """
 
 class IMPLReplacement(Law):
-    """ Encodes (P => Q) <==> (~P => Q)
+    """ Encodes (P => Q) <==> (~P \/ Q)
     """
 
     def __init__(self, *args, **kwargs):
-        toDISJUNCT = [LAWKWORDS.NOTFIRST, OpStrings.DISJUNCT, LAWKWORDS.SECONDPROP]
-        toIMPL = [LAWKWORDS.NOTFIRST, OpStrings.IMPL, LAWKWORDS.SECONDPROP]
-        mapping = {
+        toDISJUNCT = [LawKWords.NOTFIRST, OpStrings.DISJUNCT, LawKWords.SECONDPROP]
+        toIMPL = [LawKWords.NOTFIRST, OpStrings.IMPL, LawKWords.SECONDPROP]
+        self.mapping = {
                 OpStrings.IMPL : toDISJUNCT,
                 OpStrings.DISJUNCT : toIMPL,
             }
@@ -59,9 +59,9 @@ class DemorgansLaw(Law):
     """ Encodes Demorgan's Law (c.f. https://en.wikipedia.org/wiki/De_Morgan%27s_laws)
     """
     def __init__(self, *args, **kwargs):
-        CONJUCT = [LAWKWORDS.NOTFIRST, OpStrings.DISJUNCT, LAWKWORDS.NOTSECOND]
-        DISJUNCT = [LAWKWORDS.NOTFIRST, OpStrings.CONJUCT, LAWKWORDS.NOTSECOND]
-        IMPL = [LAWKWORDS.FIRSTPROP, OpStrings.CONJUCT, LAWKWORDS.NOTSECOND]
+        CONJUCT = [LawKWords.NOTFIRST, OpStrings.DISJUNCT, LawKWords.NOTSECOND]
+        DISJUNCT = [LawKWords.NOTFIRST, OpStrings.CONJUCT, LawKWords.NOTSECOND]
+        IMPL = [LawKWords.FIRSTPROP, OpStrings.CONJUCT, LawKWords.NOTSECOND]
         """TODO: Decide which common form of xor to use:
            (1) (P AND Q) OR (~P AND ~Q)
                         v.s.
@@ -70,8 +70,8 @@ class DemorgansLaw(Law):
            form)
         """
         #xor is a little more complicated syntactically so we'll build it up in stages
-        firstDisjunct = "(" + LAWKWORDS.FIRSTPROP + OpStrings.CONJUCT + LAWKWORDS.SECONDPROP + ")"
-        secondDisjunct = "(" + LAWKWORDS.NOTFIRST + OpStrings.CONJUCT + LAWKWORDS.NOTSECOND + ")"
+        firstDisjunct = "(" + LawKWords.FIRSTPROP + OpStrings.CONJUCT + LawKWords.SECONDPROP + ")"
+        secondDisjunct = "(" + LawKWords.NOTFIRST + OpStrings.CONJUCT + LawKWords.NOTSECOND + ")"
         XOR = [firstDisjunct, OpStrings.DISJUNCT, secondDisjunct]
         self.mapping = {
             OpStrings.CONJUCT : CONJUCT,
