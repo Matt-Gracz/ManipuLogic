@@ -45,6 +45,19 @@ class BinaryOperator(Operator):
 class UnaryOperator(Operator):
     """ Encodes all unary operators in propositional logic, e.g., negation. """
 
+    def applyDoubleNegation(self, proposition):
+        """Strip out all double negations,
+           In SIMPLE type: e.g., in::~~~P out::~P
+           IN COMPLEX type: e.g., in::~~~P (+) ~~Q out:: ~P (+) Q
+        """
+        newProp = proposition
+        while(newProp.rawData[0:2] == "~~"):
+            newProp.rawData = newProp.rawData[2:]
+        if(newProp.getPropType() == PropTypes.COMPLEX):            
+            while(newProp.secondProp[0:2] == "~~"):
+                newProp.secondProp = newProp.secondProp[2:]
+        return newProp
+
     def negate(self, proposition):
         """ Applies the unary operation of negation to an arbitrary instance of any subclass
             of Proposition.
@@ -72,11 +85,5 @@ class UnaryOperator(Operator):
             raise NotImplementedError()
 
         #check for double negation
-        if(newProp.rawData[0:2] == "~~"):
-            newProp.rawData = newProp.rawData[2:]
-        if(newProp.getPropType() == PropTypes.COMPLEX):            
-            if(newProp.secondProp[0:2] == "~~"):
-                newProp.secondProp = newProp.secondProp[2:]
-
-        return newProp
+        return self.applyDoubleNegation(newProp)
 
