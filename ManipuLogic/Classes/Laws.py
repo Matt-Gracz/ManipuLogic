@@ -55,11 +55,9 @@ class IMPLReplacement(Law):
         return self.applyMapping(proposition, allowedOperators)
 """ END CLASS """
 
-
-
-
 class Distributive(Law): #TODO
-    """ Encodes an abstract law of distribution across arbitrary operator combinations
+    """ Encodes an abstract law of distribution across arbitrary binary operator combinations e.g.,
+        (P \/ Q) /\ R <==> (P \/ R) /\ (Q \/ R)
     """
 
     def __init__(self, *args, **kwargs):
@@ -71,8 +69,8 @@ class Distributive(Law): #TODO
             }
     
     def applyDistribution(self, proposition):
-        allowedOperators = [OpStrings.CONJUNCT, OpStrings.DISJUNCT]
-        return self.applyMapping(proposition, allowedOperators)
+        #PROBLEM; need to search for embedded propositions!
+        
 """ END CLASS """
 
 class DemorgansLaw(Law):
