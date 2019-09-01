@@ -48,7 +48,7 @@ class UnaryOperator(Operator):
     def negate(self, proposition):
         """ Applies the unary operation of negation to an arbitrary instance of any subclass
             of Proposition.
-        """ 
+        """
         if(proposition.getPropType() == PropTypes.SIMPLE):
             newProp = SimpleProp()
             newProp.rawData = "~"+proposition.rawData
@@ -70,5 +70,13 @@ class UnaryOperator(Operator):
             newProp = DL.applyDemorgansLaw(newProp)
         else:
             raise NotImplementedError()
+
+        #check for double negation
+        if(newProp.rawData[0:2] == "~~"):
+            newProp.rawData = newProp.rawData[2:]
+        if(newProp.getPropType() == PropTypes.COMPLEX):            
+            if(newProp.secondProp[0:2] == "~~"):
+                newProp.secondProp = newProp.secondProp[2:]
+
         return newProp
 

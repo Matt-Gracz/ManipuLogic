@@ -106,15 +106,11 @@ class ComplexProp(BasicProposition):
             from Operators import OpStrings
             operators = [op for op in OpStrings.opList]
             containsOp = any([x in self.rawData for x in operators])
-            parenthesized = "(" == self.rawData[0] and ")" == self.rawData[-1]
-            checkForNegation = len(self.rawData) > 1
-            parenthesized = parenthesized or (checkForNegation and "(" == self.rawData[1])
+            parenthesized = "(" == self.rawData.strip("~")[0]
             if(containsOp and not parenthesized):
                     self.rawData = "("+self.rawData+")"
             containsOp = any([x in self.secondProp for x in operators])
-            parenthesized = "(" == self.secondProp[0] and ")" == self.secondProp[-1]
-            checkForNegation = len(self.secondProp) > 1
-            parenthesized = parenthesized or (checkForNegation and "(" == self.secondProp[1])
+            parenthesized = "(" == self.secondProp.strip("~")[0]
             if(containsOp and not parenthesized):
                     self.secondProp = "("+self.secondProp+")"
 

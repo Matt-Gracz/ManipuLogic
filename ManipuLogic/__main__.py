@@ -25,10 +25,43 @@ from Propositions import *
 #                exec(line)
 #            except Exception as e:
 #                pass
+def test1():
+    p = SimpleProp("P")
+    q = SimpleProp("Q")
+    cp = -(p + q)
+    pr()
+    cp = -cp
+    pr()
+    cp = p > q
+    pr()
+    cp = -cp
+    pr()
+    cp = --p&q>-p
+    pr()
+    cp = -(-p&q>-p)
+    pr()
+def test2():
+    p = SimpleProp("Socrates is a man.")
+    q = SimpleProp("2 + 2 = 5")
+    cp = -p
+    pr()
+    cp = -cp
+    pr()
+
+    cp = -(p > q)
+    pr()
+
+    cp = -(p + q)
+    pr()
+    print(p == p)
+    print (p == cp)
+def test3():
+    pass
+
+
 def pr():
     print("CP " + ~cp)
     print("")
-
 p = SimpleProp("P")
 q = SimpleProp("Q")
 cp = -(p + q)
@@ -42,22 +75,17 @@ pr()
 cp = --p&q>-p
 pr()
 cp = -(-p&q>-p)
-pr() #TODO goof around with this some more!
+pr()
+
+#testMap = {1 : test1, 2 : test2, 3 : test3}
+#selection = input("Enter test number: {} ".format([str(key) for key in testMap.keys()]))
+#try:
+#    testMap[int(selection)]()
+#except Exception as e:
+#    print("error!")
+#    pass
 
 
-#p = SimpleProp("Socrates is a man.")
-#q = SimpleProp("2 + 2 = 5")
-#cp = -p
-#pr()
-#cp = -cp
-#pr()
 
-#cp = -(p > q)
-#pr()
-
-#cp = -(p + q)
-#pr()
-#print(p == p)
-#print (p == cp)
 
 
