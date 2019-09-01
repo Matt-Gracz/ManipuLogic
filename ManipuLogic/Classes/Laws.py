@@ -55,13 +55,32 @@ class IMPLReplacement(Law):
         return self.applyMapping(proposition, allowedOperators)
 """ END CLASS """
 
+
+
+
+class Distributive(Law): #TODO
+    """ Encodes an abstract law of distribution across arbitrary operator combinations
+    """
+
+    def __init__(self, *args, **kwargs):
+        toDISJUNCT = [LawKWords.NOTFIRST, OpStrings.DISJUNCT, LawKWords.SECONDPROP]
+        toIMPL = [LawKWords.NOTFIRST, OpStrings.IMPL, LawKWords.SECONDPROP]
+        self.mapping = {
+                OpStrings.IMPL : toDISJUNCT,
+                OpStrings.DISJUNCT : toIMPL,
+            }
+    
+    def applyDistribution(self, proposition):
+        allowedOperators = [OpStrings.CONJUNCT, OpStrings.DISJUNCT]
+        return self.applyMapping(proposition, allowedOperators)
+""" END CLASS """
+
 class DemorgansLaw(Law):
     """ Encodes Demorgan's Law (c.f. https://en.wikipedia.org/wiki/De_Morgan%27s_laws)
     """
     def __init__(self, *args, **kwargs):
-        CONJUCT = [LawKWords.NOTFIRST, OpStrings.DISJUNCT, LawKWords.NOTSECOND]
-        DISJUNCT = [LawKWords.NOTFIRST, OpStrings.CONJUCT, LawKWords.NOTSECOND]
-        IMPL = [LawKWords.FIRSTPROP, OpStrings.CONJUCT, LawKWords.NOTSECOND]
+        CONJUNCT = [LawKWords.NOTFIRST, OpStrings.DISJUNCT, LawKWords.NOTSECOND]
+        DISJUNCT = [LawKWords.NOTFIRST, OpStrings.CONJUNCT, LawKWords.NOTSECOND]
         """TODO: Decide which common form of xor to use:
            (1) (P AND Q) OR (~P AND ~Q)
                         v.s.
@@ -70,17 +89,17 @@ class DemorgansLaw(Law):
            form)
         """
         #xor is a little more complicated syntactically so we'll build it up in stages
-        firstDisjunct = "(" + LawKWords.FIRSTPROP + OpStrings.CONJUCT + LawKWords.SECONDPROP + ")"
-        secondDisjunct = "(" + LawKWords.NOTFIRST + OpStrings.CONJUCT + LawKWords.NOTSECOND + ")"
+        firstDisjunct = "(" + LawKWords.FIRSTPROP + OpStrings.CONJUNCT + LawKWords.SECONDPROP + ")"
+        secondDisjunct = "(" + LawKWords.NOTFIRST + OpStrings.CONJUNCT + LawKWords.NOTSECOND + ")"
         XOR = [firstDisjunct, OpStrings.DISJUNCT, secondDisjunct]
         self.mapping = {
-            OpStrings.CONJUCT : CONJUCT,
+            OpStrings.CONJUNCT : CONJUNCT,
             OpStrings.DISJUNCT : DISJUNCT,
-            OpStrings.IMPL : IMPL,
             OpStrings.XOR : XOR
             }    
 
     def applyDemorgansLaw(self, proposition):
+        allowedOperators = [OpStrings.CONJUNCT, OpStrings.DISJUNCT, OpStrings.XOR]
         return self.applyMapping(proposition)
 """ END CLASS """
 

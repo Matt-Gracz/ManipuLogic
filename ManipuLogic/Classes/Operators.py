@@ -7,10 +7,11 @@ from BaseClasses import Operator
 
 class OpStrings():
     DISJUNCT = " OR "
-    CONJUCT = " AND "
+    CONJUNCT = " AND "
     IMPL = " => "
     XOR = " (+) "
-    opList = [DISJUNCT, CONJUCT, IMPL, XOR]
+    EQUIV = " <==> "
+    opList = [DISJUNCT, CONJUNCT, IMPL, XOR, EQUIV]
 
 class BinaryOperator(Operator):
     """ Encodes all binary operators in propositional logic, e.g., conjunction, implication, 
@@ -29,7 +30,7 @@ class BinaryOperator(Operator):
 
     def conjoin(self, antecedent, consequent):
         """ Creates a ComplexProp of the form (antecdent, AND, consequent) """
-        cp = self.applyBinaryOperator(antecedent, OpStrings.CONJUCT, consequent)
+        cp = self.applyBinaryOperator(antecedent, OpStrings.CONJUNCT, consequent)
         return cp
 
     def imply(self, antecedent, consequent):
@@ -70,8 +71,8 @@ class UnaryOperator(Operator):
                 operator, then first we need to check if the operator is an implication. If so,
                 then we need to convert it to a disjunction.  Secondly, once that's done, we'll be
                 sure that the infixed operator is a disjunction or conjunction, so we'll apply
-                DeMorgan's law and end up with our final simplest negated form to return to the 
-                caller.
+                DeMorgan's law, strip out any redundant negations, and end up with our final 
+                simplest negated form of the input proposition to return to the caller.
             """
             newProp = ComplexProp(proposition.rawData, proposition.operator, proposition.secondProp)
             if(newProp.operator == OpStrings.IMPL):

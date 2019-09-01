@@ -21,6 +21,6 @@ class Proposition(LogicalConstruct):
 """ END CLASS """
 
 class Operator(LogicalConstruct):
-    """ Any operator in any type of logic (e.g., CONJUCT, for-all(x) etc...) """
+    """ Any operator in any type of logic (e.g., CONJUNCT, for-all(x) etc...) """
 """ END CLASS """
 
