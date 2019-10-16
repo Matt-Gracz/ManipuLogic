@@ -62,6 +62,9 @@ def test3():
 def pr():
     print("CP " + ~cp)
     print("")
+
+
+
 p = SimpleProp("P")
 q = SimpleProp("Q")
 cp = -(p + q)

@@ -11,8 +11,10 @@ class LawKWords:
     NOTFIRST = "~first"
     NOTSECOND = "~second"
 
-
 class Law(LogicalConstruct):
+    pass
+
+class ReplacementLaw(Law):
     """ An abstract law that replaces one set of symbols with another.  Individual laws of 
        replacement will inheret from this class 
     """
@@ -38,7 +40,7 @@ class Law(LogicalConstruct):
         return returnProp
 """ END CLASS """
 
-class IMPLReplacement(Law):
+class IMPLReplacement(ReplacementLaw):
     """ Encodes (P => Q) <==> (~P \/ Q)
     """
 
@@ -55,25 +57,32 @@ class IMPLReplacement(Law):
         return self.applyMapping(proposition, allowedOperators)
 """ END CLASS """
 
-class Distributive(Law): #TODO
-    """ Encodes an abstract law of distribution across arbitrary binary operator combinations e.g.,
-        (P \/ Q) /\ R <==> (P \/ R) /\ (Q \/ R)
+class XorReplacement(ReplacementLaw):
+    """ Encodes (P (+) Q) <==> (~P /\ Q) \/ (P /\ ~Q)
     """
 
+    #Xor replacement is always the same so we can hard-code it inline for
+    #performance considerations rather than call applyMapping
     def __init__(self, *args, **kwargs):
-        toDISJUNCT = [LawKWords.NOTFIRST, OpStrings.DISJUNCT, LawKWords.SECONDPROP]
-        toIMPL = [LawKWords.NOTFIRST, OpStrings.IMPL, LawKWords.SECONDPROP]
-        self.mapping = {
-                OpStrings.IMPL : toDISJUNCT,
-                OpStrings.DISJUNCT : toIMPL,
-            }
+        pass
     
-    def applyDistribution(self, proposition):
-        #PROBLEM; need to search for embedded propositions!
+    def applyXorReplacement(self, proposition):
+        #allowedOperators = [OpStrings.XOR] legacy/deprecated
+        if proposition.operator != OpStrings.XOR:
+            return proposition
+        dis = OpStrings.DISJUNCT
+        oldRawData = proposition.rawData
+        oldSecondProp = proposition.secondProp
+        newRawData = "(~" + oldRawData + dis + oldSecondProp + ")"
+        newOp = OpStrings.CONJUNCT
+        newSecondProp = "(" + oldRawData + dis + "~" + oldSecondProp + ")"
+        returnProp = ComplexProp(newRawData, newOp, newSecondProp)
+        return returnProp
         
 """ END CLASS """
 
-class DemorgansLaw(Law):
+
+class DemorgansLaw(ReplacementLaw):
     """ Encodes Demorgan's Law (c.f. https://en.wikipedia.org/wiki/De_Morgan%27s_laws)
     """
     def __init__(self, *args, **kwargs):
@@ -101,3 +110,34 @@ class DemorgansLaw(Law):
         return self.applyMapping(proposition)
 """ END CLASS """
 
+class Distributive(Law): #TODO
+    """ Encodes an abstract law of distribution across arbitrary binary operator combinations e.g.,
+        (P \/ Q) /\ R <==> (P \/ R) /\ (Q \/ R)
+    """
+
+    def __init__(self, *args, **kwargs):
+        toDISJUNCT = [LawKWords.NOTFIRST, OpStrings.DISJUNCT, LawKWords.SECONDPROP]
+        toIMPL = [LawKWords.NOTFIRST, OpStrings.IMPL, LawKWords.SECONDPROP]
+        self.mapping = {
+                OpStrings.IMPL : toDISJUNCT,
+                OpStrings.DISJUNCT : toIMPL,
+            }
+    
+    def applyDistribution(self, proposition):
+        #PROBLEM; need to search for embedded propositions!
+        #first hacky stab at solving this problem is below
+        
+        #first off, we only can distribute over complex props
+        if proposition.propType is not PropTypes.COMPLEX:
+            return proposition
+
+        #unravel a proposition if it has a bunch of double negations to cancel out
+        from Operators import UnaryOperator
+        uo = UnaryOperator()
+        uo.applyDoubleNegation(proposition)
+
+        #once we're in normal form we'll build up the strings to replace
+        
+        
+        
+""" END CLASS """
