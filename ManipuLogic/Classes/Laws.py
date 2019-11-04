@@ -123,46 +123,46 @@ class Distributive(Law): #TODO
                 OpStrings.DISJUNCT : toIMPL,
             }
 
-    #experimental functions; pull this out to be more general if it ends up working
-    def detectEmbeddedProps(self, complexProp):
-        #first off, we only can embed in complex props
-        if complexProp.propType is not PropTypes.COMPLEX:
-            return [False, False]
-        #non-embedded props look like:
-        #P OP1 Q
-        #embedded props look like:
-        #1: (P OP1 Q) OP2 R
-        #2: P OP1 (Q OP2 R)
-        #3: (P OP1 Q) OP2 (R OP3 W)
-        #So it's sufficient to just check for a parens in either rawData or secondProp
-        yesRawData = "(" in complexProp.rawData or ")" in complexProp.rawData
-        yesSecondProp = "(" in complexProp.secondProp or ")" in complexProp.secondProp
-        return [yesRawDataa, yesSecondProp]
-    def extractEmbeddedProps(self, complexProp):
-        from Operators import OpStrings
-        operators = [op for op in OpStrings.opList]
-        embedded = self.detectEmbeddedProps(complexProp)
-        cp1 = None
-        cp2 = None
-        data = ""
-        #rawData takes precedence
-        if embedded[0]:
-            data = complexProp.rawData
-            firstOpIndeces = {}
-            for op in operators:
-                firstOpIndeces[data.find(op)] = op
-            strippedIndeces = [x for x in firstOpIndeces.keys() if x >= 0]
-            firstOpIndex = strippedIndeces[0]
-            for i in strippedIndeces:
-                if i < firstOpIndex:
-                    firstOpfirstOpIndex = i
-            firstOp = firstOpIndeces[firstOpIndex]
-            #simple on LHS of embeddedprop
-            if "(" != data[0]:
+    ##experimental functions; pull this out to be more general if it ends up working
+    #def detectEmbeddedProps(self, complexProp):
+    #    #first off, we only can embed in complex props
+    #    if complexProp.propType is not PropTypes.COMPLEX:
+    #        return [False, False]
+    #    #non-embedded props look like:
+    #    #P OP1 Q
+    #    #embedded props look like:
+    #    #1: (P OP1 Q) OP2 R
+    #    #2: P OP1 (Q OP2 R)
+    #    #3: (P OP1 Q) OP2 (R OP3 W)
+    #    #So it's sufficient to just check for a parens in either rawData or secondProp
+    #    yesRawData = "(" in complexProp.rawData or ")" in complexProp.rawData
+    #    yesSecondProp = "(" in complexProp.secondProp or ")" in complexProp.secondProp
+    #    return [yesRawDataa, yesSecondProp]
+    #def extractEmbeddedProps(self, complexProp):
+    #    from Operators import OpStrings
+    #    operators = [op for op in OpStrings.opList]
+    #    embedded = self.detectEmbeddedProps(complexProp)
+    #    cp1 = None
+    #    cp2 = None
+    #    data = ""
+    #    #rawData takes precedence
+    #    if embedded[0]:
+    #        data = complexProp.rawData
+    #        firstOpIndeces = {}
+    #        for op in operators:
+    #            firstOpIndeces[data.find(op)] = op
+    #        strippedIndeces = [x for x in firstOpIndeces.keys() if x >= 0]
+    #        firstOpIndex = strippedIndeces[0]
+    #        for i in strippedIndeces:
+    #            if i < firstOpIndex:
+    #                firstOpfirstOpIndex = i
+    #        firstOp = firstOpIndeces[firstOpIndex]
+    #        #simple on LHS of embeddedprop
+    #        if "(" != data[0]:
                 
                     
                 
-            cp1 = ComplexProp()
+    #        cp1 = ComplexProp()
 
 
     def applyDistribution(self, proposition):
