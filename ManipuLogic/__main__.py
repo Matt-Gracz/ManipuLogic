@@ -67,18 +67,24 @@ def pr():
 
 p = SimpleProp("P")
 q = SimpleProp("Q")
-cp = -(p + q)
-pr()
-cp = -cp
-pr()
-cp = p > q
-pr()
-cp = -cp
-pr()
-cp = --p&q>-p
-pr()
-cp = -(-p&q>-p)
-pr()
+
+r = p>q
+w = r+(p|q)
+print(w)
+
+
+#cp = -(p + q)
+#pr()
+#cp = -cp
+#pr()
+#cp = p > q
+#pr()
+#cp = -cp
+#pr()
+#cp = --p&q>-p
+#pr()
+#cp = -(-p&q>-p)
+#pr()
 
 #testMap = {1 : test1, 2 : test2, 3 : test3}
 #selection = input("Enter test number: {} ".format([str(key) for key in testMap.keys()]))
