@@ -123,46 +123,93 @@ class Distributive(Law): #TODO
                 OpStrings.DISJUNCT : toIMPL,
             }
 
-    ##experimental functions; pull this out to be more general if it ends up working
-    #def detectEmbeddedProps(self, complexProp):
-    #    #first off, we only can embed in complex props
-    #    if complexProp.propType is not PropTypes.COMPLEX:
-    #        return [False, False]
-    #    #non-embedded props look like:
-    #    #P OP1 Q
-    #    #embedded props look like:
-    #    #1: (P OP1 Q) OP2 R
-    #    #2: P OP1 (Q OP2 R)
-    #    #3: (P OP1 Q) OP2 (R OP3 W)
-    #    #So it's sufficient to just check for a parens in either rawData or secondProp
-    #    yesRawData = "(" in complexProp.rawData or ")" in complexProp.rawData
-    #    yesSecondProp = "(" in complexProp.secondProp or ")" in complexProp.secondProp
-    #    return [yesRawDataa, yesSecondProp]
-    #def extractEmbeddedProps(self, complexProp):
-    #    from Operators import OpStrings
-    #    operators = [op for op in OpStrings.opList]
-    #    embedded = self.detectEmbeddedProps(complexProp)
-    #    cp1 = None
-    #    cp2 = None
-    #    data = ""
-    #    #rawData takes precedence
-    #    if embedded[0]:
-    #        data = complexProp.rawData
-    #        firstOpIndeces = {}
-    #        for op in operators:
-    #            firstOpIndeces[data.find(op)] = op
-    #        strippedIndeces = [x for x in firstOpIndeces.keys() if x >= 0]
-    #        firstOpIndex = strippedIndeces[0]
-    #        for i in strippedIndeces:
-    #            if i < firstOpIndex:
-    #                firstOpfirstOpIndex = i
-    #        firstOp = firstOpIndeces[firstOpIndex]
-    #        #simple on LHS of embeddedprop
-    #        if "(" != data[0]:
-                
-                    
-                
-    #        cp1 = ComplexProp()
+    #experimental functions; pull this out to be more general if it ends up working
+    def detectEmbeddedProps(self, complexProp):
+        #first off, we only can embed in complex props
+        if complexProp.propType is not PropTypes.COMPLEX:
+            return [False, False]
+        #non-embedded props look like:
+        #P OP1 Q
+        #embedded props look like:
+        #1: (P OP1 Q) OP2 R
+        #2: P OP1 (Q OP2 R)
+        #3: (P OP1 Q) OP2 (R OP3 W)
+        #So it's sufficient to just check for a parens in either rawData or secondProp
+        yesRawData = "(" in complexProp.rawData or ")" in complexProp.rawData
+        yesSecondProp = "(" in complexProp.secondProp or ")" in complexProp.secondProp
+        return [yesRawData, yesSecondProp]
+    def splitEmbeddedComplexProp(data):
+        #we have to find the main connector/operator in the embedded prop.  Note we can't
+        #use str.split because the LHS of the embedded prop itself might contain that
+        #same operator, which would cause the resultant call to str.split to parse into
+        #more than 3 strs (we ultimately want [LHS, OP, RHS] to create our new ComplexProp
+        #from)
+        #case 1: (SIMPLE OP SIMPLE)
+        #case 2: (SIMPLE OP (COMPLEX))
+        #case 3: ((COMPLEX) OP SIMPLE)
+        #case 4: ((COMPLEX) OP (COMPLEX))
+        
+        #pre-processing: strip out 
+        
+        
+        pass
+    def extractEmbeddedProps(self, complexProp):
+        from Operators import OpStrings
+        operators = [op for op in OpStrings.opList]
+        embedded = self.detectEmbeddedProps(complexProp)
+        prop1 = None
+        prop2 = None
+        data = ""
+        #LHS
+        if embedded[0]:
+            data = complexProp.rawData
+            firstOpIndeces = {}
+            for op in operators:
+                firstOpIndeces[data.find(op)] = op
+            strippedIndeces = [x for x in firstOpIndeces.keys() if x >= 0]
+
+            #alternate method: find all op indeces
+            #tested in cmd line; seems to work; 11/6/19
+            tempData = data
+            allOpsWithIndeces = {}
+            stop = False
+            while(not stop):
+                lowestOpIndex = len(tempData)
+                tempOpIndeces = {}
+                for op in operators:
+                    index = tempData.find(op)
+                    if(index > 0):
+                        tempOpIndeces[index] = op
+                        lowestOpIndex = min(lowestOpIndex, index)
+                if len(tempOpIndeces.keys()) > 0:
+                    allOpsWithIndeces[lowestOpIndex+(len(data)-len(tempData))] = tempOpIndeces[lowestOpIndex]
+                    tempData = tempData[lowestOpIndex+1:]
+                else: #no more operators left
+                    stop = True
+
+            sortedIndeces = sorted(strippedIndices)
+            #simple on LHS of embeddedprop
+            if "(" != data[0]:
+                firstOp = sortedIndeces[0]
+                prop1 = SimpleProp(data.split(firstOp)[0])
+            else: #complex on LHS of embeddedProp
+                #we have to find the main connector/operator in the embedded prop.  Note we can't
+                #use str.split because the LHS of the embedded prop itself might contain that
+                #same operator, which would cause the resultant call to str.split to parse into
+                #more than 3 strs (we ultimately want [LHS, OP, RHS] to create our new ComplexProp
+                #from)
+                #case 1: sos (SIMPLE OP SIMPLE)
+                #case 2: soc (SIMPLE OP (COMPLEX))
+                #case 3: cos ((COMPLEX) OP SIMPLE)
+                #case 4: coc ((COMPLEX) OP (COMPLEX))
+        
+                #pre-processing: remove leading and trailing parens
+                data = data[1:-1]
+                propData = []
+                #case 1: sos
+                if len(sortedIndeces) == 1:
+                    propData = data.split(firstOp)
+                    prop1 = ComplexProp(data[0], firstOp, data[1])
 
 
     def applyDistribution(self, proposition):

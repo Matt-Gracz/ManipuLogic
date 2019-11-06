@@ -9,7 +9,7 @@ class OpStrings():
     DISJUNCT = " OR "
     CONJUNCT = " AND "
     IMPL = " => "
-    XOR = " (+) "
+    XOR = " [+] "
     EQUIV = " <==> "
     opList = [DISJUNCT, CONJUNCT, IMPL, XOR, EQUIV]
 
